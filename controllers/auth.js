@@ -2,13 +2,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
-const BadRequestError = require("../errors/bad-request-err");
 const AuthError = require("../errors/auth-err");
 const ConflictError = require("../errors/conflict-err");
 
 const User = require("../models/user");
 const { ERROR_MESSAGES, STATUS_CODES, DEV_KEY } = require("../utils/constants");
-const { commaDecimal } = require("validator/lib/alpha");
 
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
