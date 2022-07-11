@@ -17,26 +17,12 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.addArticle = (req, res, next) => {
-  const { keyword, title, text, date, source, link, image } = req.body;
-  const owner = req.user._id;
-
+  // const { keyword, title, text, date, source, link, image } = req.body;
   Article.create({
-    keyword,
-    title,
-    text,
-    date,
-    source,
-    link,
-    image,
-    owner,
+    ...req.body,
+    owner: req.user._id,
   })
-
     .then((article) => res.status(STATUS_CODES.ok).send(article))
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        throw new BadRequestError(ERROR_MESSAGES.articleBadRequest);
-      }
-    })
     .catch(next);
 };
 
@@ -49,14 +35,14 @@ module.exports.deleteArticle = (req, res, next) => {
           res.status(STATUS_CODES.ok).send(deletedArticle);
         });
       } else if (!article) {
-        throw new NotFoundError(ERROR_MESSAGES.articleNotFound);
+        next(new NotFoundError(ERROR_MESSAGES.articleNotFound));
       } else {
-        throw new AuthError(ERROR_MESSAGES.deleteArticle);
+        next(new AuthError(ERROR_MESSAGES.deleteArticle));
       }
     })
     .catch((err) => {
       if (err.name === "CastError" || err.statusCode === 404) {
-        throw new NotFoundError(ERROR_MESSAGES.articleNotFound);
+        next(new NotFoundError(ERROR_MESSAGES.articleNotFound));
       }
       next(err);
     })

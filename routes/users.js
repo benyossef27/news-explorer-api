@@ -3,6 +3,16 @@ const auth = require("../middleware/auth");
 
 const { getUser } = require("../controllers/users");
 
-router.get("/me", auth, getUser);
+const { createUser, login } = require("../controllers/auth");
+
+const {
+  validateCreateUser,
+  validateLogin,
+} = require("../middleware/validator");
+
+router.get("/users/me", auth, getUser);
+
+router.post("/signup", validateCreateUser, createUser);
+router.post("/signin", validateLogin, login);
 
 module.exports = router;

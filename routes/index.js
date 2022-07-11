@@ -4,7 +4,6 @@ const users = require("./users");
 const auth = require("./auth");
 const articles = require("./articles");
 
-router.use("/users", auth, users);
-router.use("/articles", auth, articles);
+router.use(users, articles, auth);
 
 module.exports = router;

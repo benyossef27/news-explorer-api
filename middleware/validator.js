@@ -1,4 +1,4 @@
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi } = require("celebrate");
 
 module.exports.validateCreateUser = celebrate({
   body: Joi.object().keys({
@@ -24,6 +24,12 @@ module.exports.validateCreateArticle = celebrate({
     source: Joi.string().required(),
     link: Joi.string().uri().required(),
     image: Joi.string().uri().required(),
+  }),
+});
+
+module.exports.validateDeleteArticle = celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().min(24).max(24).required().hex(),
   }),
 });
 

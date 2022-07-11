@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    throw new AuthError(ERROR_MESSAGES.unauthorized);
+    next(new AuthError(ERROR_MESSAGES.unauthorized));
   }
 
   const token = authorization.replace("Bearer ", "");
@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === "production" ? JWT_SECRET : DEV_KEY
     );
   } catch (err) {
-    throw new AuthError(ERROR_MESSAGES.unauthorized);
+    next(new AuthError(ERROR_MESSAGES.unauthorized));
   }
   req.user = payload;
   next();

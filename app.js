@@ -16,13 +16,12 @@ const { PORT = 3001 } = process.env;
 const app = express();
 
 mongoose.connect(DB_ADDRESS);
-
+app.use(requestLogger);
 app.use(limiter);
 app.use(cors());
 app.options("*", cors());
 app.use(express.json());
 app.use(helmet());
-app.use(requestLogger);
 
 app.use("/", routes);
 
