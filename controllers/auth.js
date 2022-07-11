@@ -8,30 +8,27 @@ const ConflictError = require("../errors/conflict-err");
 
 const User = require("../models/user");
 const { ERROR_MESSAGES, STATUS_CODES, DEV_KEY } = require("../utils/constants");
+const { commaDecimal } = require("validator/lib/alpha");
 
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
-  bcrypt
-    .hash(password, 10)
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        next(new ConflictError(ERROR_MESSAGES.confilct));
+      }
+      return bcrypt.hash(password, 10);
+    })
     .then((hash) => User.create({ name, email, password: hash }))
-
     .then((user) =>
       res.status(STATUS_CODES.created).send({
         email: user.email,
         _id: user._id,
       })
     )
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        throw new BadRequestError(ERROR_MESSAGES.userBadRequest);
-      } else if (err.name === "MongoError") {
-        throw new ConflictError(ERROR_MESSAGES.signup);
-      }
-      next(err);
-    })
     .catch(next);
 };
 

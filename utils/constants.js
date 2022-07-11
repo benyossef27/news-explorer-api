@@ -33,4 +33,5 @@ module.exports.ERROR_MESSAGES = {
   signin: "Incorrect email or password.",
   signup: "Unable to create a user with the credentials provided.",
   userBadRequest: "User not found.",
+  confilct: "a user with this email already exists",
 };
