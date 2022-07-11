@@ -1,7 +1,6 @@
 const Article = require("../models/article");
 const { ERROR_MESSAGES, STATUS_CODES } = require("../utils/constants");
 
-const BadRequestError = require("../errors/bad-request-err");
 const ServerError = require("../errors/server-err");
 const NotFoundError = require("../errors/not-found-err");
 const AuthError = require("../errors/auth-err");
