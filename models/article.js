@@ -50,13 +50,6 @@ const articleSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
-  likes: [
-    {
-      type: Array,
-      ref: "user",
-      default: [],
-    },
-  ],
 });
 
 module.exports = mongoose.model("article", articleSchema);
