@@ -5,6 +5,8 @@ const {
   getArticles,
   addArticle,
   deleteArticle,
+  likeArticle,
+  unLikeArticle,
 } = require("../controllers/articles");
 const {
   validateCreateArticle,
@@ -13,6 +15,9 @@ const {
 
 router.get("/articles", auth, getArticles);
 router.post("/articles", auth, validateCreateArticle, addArticle);
+router.put("/articles/likes/:articlesId", auth, likeArticle);
+router.delete("/articles/likes/:articlesId", auth, unLikeArticle);
+
 router.delete(
   "/articles/:articleId",
   auth,
