@@ -29,7 +29,7 @@ module.exports.validateCreateArticle = celebrate({
 
 module.exports.validateDeleteArticle = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().min(24).max(24).required().hex(),
+    id: Joi.string().min().max().required().hex(),
   }),
 });
 
