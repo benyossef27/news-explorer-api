@@ -25,53 +25,25 @@ module.exports.addArticle = (req, res, next) => {
     .catch(next);
 };
 
-// module.exports.deleteArticle = (req, res, next) => {
-//   Article.findById(req.params.articleId)
-//     .select("+owner")
-//     .then((article) => {
-//       if (article && req.user._id.toString() === article.owner.toString()) {
-//         Article.deleteOne(article).then((deletedArticle) => {
-//           res.status(STATUS_CODES.ok).send(deletedArticle);
-//         });
-//       } else if (!article) {
-//         next(new NotFoundError(ERROR_MESSAGES.articleNotFound));
-//       } else {
-//         next(new AuthError(ERROR_MESSAGES.deleteArticle));
-//       }
-//     })
-//     .catch((err) => {
-//       if (err.name === "CastError" || err.statusCode === 404) {
-//         next(new NotFoundError(ERROR_MESSAGES.articleNotFound));
-//       }
-//       next(err);
-//     })
-//     .catch(next);
-// };
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findOne({ _id: req.params.articleId })
+  Article.findById(req.params.articleId)
     .select("+owner")
     .then((article) => {
-      if (!article) {
+      if (article && req.user._id.toString() === article.owner.toString()) {
+        Article.deleteOne(article).then((deletedArticle) => {
+          res.status(STATUS_CODES.ok).send(deletedArticle);
+        });
+      } else if (!article) {
+        next(new NotFoundError(ERROR_MESSAGES.articleNotFound));
+      } else {
+        next(new AuthError(ERROR_MESSAGES.deleteArticle));
+      }
+    })
+    .catch((err) => {
+      if (err.name === "CastError" || err.statusCode === 404) {
         next(new NotFoundError(ERROR_MESSAGES.articleNotFound));
       }
-      if (article.owner.toString() !== req.user._id) {
-        next(new AuthError(ERROR_MESSAGES.unauthorized));
-      }
-      return Article.findOneAndDelete(req.params.articleId)
-        .then((deletedArticle) => {
-          const { keyword, date, text, title, source, link, image } =
-            deletedArticle;
-          res.send({
-            keyword,
-            date,
-            text,
-            title,
-            source,
-            link,
-            image,
-          });
-        })
-        .catch((err) => next(err));
+      next(err);
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
