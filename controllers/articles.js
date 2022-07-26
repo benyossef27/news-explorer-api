@@ -26,7 +26,7 @@ module.exports.addArticle = (req, res, next) => {
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findById(req.params.articleId)
+  Article.findById({ _id: req.params.articleId })
     .select("+owner")
     .then((article) => {
       if (article && req.user._id.toString() === article.owner.toString()) {
