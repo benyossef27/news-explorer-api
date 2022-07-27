@@ -20,7 +20,7 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.addArticle = (req, res, next) => {
-  // const { keyword, title, text, date, source, link, image } = req.body;
+  const { keyword, title, text, date, source, link, image } = req.body;
   Article.create({
     ...req.body,
     owner: req.user._id,
