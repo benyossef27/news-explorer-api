@@ -8,7 +8,11 @@ const AuthError = require("../errors/auth-err");
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
     .select("+owner")
-    .then((articles) => res.status(STATUS_CODES.ok).send(articles))
+    .then((articles) =>
+      res
+        .status(STATUS_CODES.ok)
+        .send(articlesarticles.filter((item) => item.owner === req.user._id))
+    )
     .catch(() => {
       throw new ServerError(ERROR_MESSAGES.internalServer);
     })
