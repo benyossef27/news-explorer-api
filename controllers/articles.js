@@ -11,7 +11,9 @@ module.exports.getArticles = (req, res, next) => {
     .then((articles) =>
       res
         .status(STATUS_CODES.ok)
-        .send(articles.filter((item) => item.owner.value === req.user._id))
+        .send(
+          articles.filter((item) => item.owner.value === req.user._id.value)
+        )
     )
     .catch(() => {
       throw new ServerError(ERROR_MESSAGES.internalServer);
